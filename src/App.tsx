@@ -1,6 +1,9 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { ReactFlow, Background, applyNodeChanges, applyEdgeChanges, addEdge, ReactFlowProvider, useReactFlow, type Node, type Edge, type NodeChange, type EdgeChange, type Connection } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { Auth } from './components/Auth';
+import { type Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
 import { ReviewSession } from './components/ReviewSession';
 import { NoteEditor } from './components/NoteEditor';
@@ -279,6 +282,9 @@ function FlowEditor() {
           <button className={tab === 'review' ? 'nav-btn active' : 'nav-btn'} onClick={() => setTab('review')}>Flashcards</button>
           <button className="nav-btn" style={{ color: '#ffc15a', border: '1px solid #ffc15a' }} onClick={() => setIsTesting(true)}>
             🧠 Test My Memory
+            <button className="nav-btn" style={{ color: '#ff4d4d', marginLeft: '10px' }} onClick={() => supabase.auth.signOut()}>
+              Log Out
+            </button>
           </button>
         </div>
       </div>
@@ -334,6 +340,30 @@ function FlowEditor() {
 }
 
 export default function App() {
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check active session on load
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
+
+    // Listen for auth changes (login/logout)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) return <div className="starfield" style={{ color: '#55d8ff', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '24px' }}>Loading MindForge...</div>;
+
+  if (!session) {
+    return <Auth />;
+  }
+
   return (
     <ReactFlowProvider>
       <FlowEditor />
