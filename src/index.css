@@ -1,0 +1,304 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+:root {
+  --bg: #02040a;
+  --panel: rgba(7, 16, 30, 0.75);
+  --cyan: #55d8ff;
+  --gold: #ff9d00;
+  --text: #ffffff;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Merriweather', serif;
+  overflow: hidden;
+}
+
+.starfield {
+  background:
+    radial-gradient(circle at 70% 50%, rgba(255, 157, 0, 0.05), transparent 30%),
+    radial-gradient(circle at 30% 30%, rgba(85, 216, 255, 0.05), transparent 40%),
+    #02040a;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+/* --- Top Right Controls --- */
+.top-controls {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  display: flex;
+  gap: 25px;
+  z-index: 1000;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccc;
+}
+
+.control-group .key {
+  border: 1px solid #ff9d00;
+  color: #ff9d00;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.control-group .icon {
+  font-size: 18px;
+  color: #fff;
+}
+
+/* --- Bottom Navigation --- */
+.nav-bar {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--panel);
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  z-index: 1000;
+  gap: 40px;
+}
+
+.nav-bar h1 {
+  color: var(--gold);
+  font-size: 18px;
+  margin: 0;
+}
+
+.nav-btn {
+  background: transparent;
+  color: #9bb0c8;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: sans-serif;
+}
+
+.nav-btn.active {
+  color: var(--cyan);
+  border-bottom: 2px solid var(--cyan);
+}
+
+.content-area {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* --- NODE STYLES --- */
+
+/* 1. Root Node (Fiery Orange) */
+.node-root-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.node-root-orb {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffcf54, #ff6a00 60%, #000 100%);
+  border: 2px solid #ffb700;
+  box-shadow:
+    0 0 40px rgba(255, 106, 0, 0.8),
+    0 0 80px rgba(255, 106, 0, 0.4),
+    inset 0 0 20px rgba(0, 0, 0, 0.8);
+  position: relative;
+  z-index: 2;
+}
+
+.node-root-orb::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: radial-gradient(circle, transparent 40%, rgba(255, 106, 0, 0.3) 60%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+  animation: pulse-fire 2s infinite alternate;
+}
+
+@keyframes pulse-fire {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1.3);
+    opacity: 0.4;
+  }
+}
+
+/* 2. Primary Node (Large Cyan) */
+.node-primary-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.node-primary-orb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #55d8ff;
+  box-shadow: 0 0 20px #55d8ff, 0 0 40px #55d8ff;
+  z-index: 2;
+}
+
+/* 3. Secondary Node (Small Cyan Dot) */
+.node-secondary-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.node-secondary-wrapper.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.node-secondary-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #55d8ff;
+  box-shadow: 0 0 10px #55d8ff, 0 0 20px #55d8ff;
+  z-index: 2;
+}
+
+/* Text Labels */
+.node-label {
+  font-family: 'Merriweather', serif;
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(85, 216, 255, 0.3);
+  white-space: nowrap;
+  position: absolute;
+  pointer-events: none;
+}
+
+.node-label.right {
+  left: 100px;
+}
+
+.node-primary-wrapper .node-label {
+  left: 50px;
+}
+
+.node-secondary-wrapper .node-label {
+  position: relative;
+}
+
+/* --- EDGES (The Glowing Neural Lines) --- */
+.react-flow__edge-path {
+  stroke: rgba(255, 255, 255, 0.8) !important;
+  stroke-width: 2 !important;
+  filter: drop-shadow(0 0 5px #55d8ff) drop-shadow(0 0 10px #55d8ff);
+}
+
+.react-flow__edge.animated path {
+  stroke-dasharray: 10;
+  animation: dashdraw 2s linear infinite;
+}
+
+@keyframes dashdraw {
+  from {
+    stroke-dashoffset: 20;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* --- Modal Overlay & Content --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal-content {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 40px rgba(85, 216, 255, 0.2);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-content h2 {
+  color: var(--gold);
+  margin-top: 0;
+  font-family: sans-serif;
+}
+
+.concept-label {
+  font-size: 24px;
+  color: #fff;
+  margin: 15px 0 20px;
+  text-shadow: 0 0 10px rgba(85, 216, 255, 0.5);
+}
+
+.close-btn {
+  background: transparent;
+  color: #9bb0c8;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Make cursor pointer on nodes to show they are clickable */
+.node-root-wrapper,
+.node-primary-wrapper,
+.node-secondary-wrapper {
+  cursor: pointer;
+}
